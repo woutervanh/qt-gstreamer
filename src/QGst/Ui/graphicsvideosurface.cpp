@@ -20,7 +20,8 @@
 #include "../../QGlib/connect.h"
 
 #ifndef QTGSTREAMER_UI_NO_OPENGL
-# include <QtOpenGL/QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLContext>
 #endif
 
 namespace QGst {
@@ -46,13 +47,13 @@ ElementPtr GraphicsVideoSurface::videoSink() const
     if (d->videoSink.isNull()) {
 #ifndef QTGSTREAMER_UI_NO_OPENGL
         //if the viewport is a QGLWidget, profit from it
-        QGLWidget *glw = qobject_cast<QGLWidget*>(d->view->viewport());
+        QOpenGLWidget *glw = qobject_cast<QOpenGLWidget*>(d->view->viewport());
         if (glw) {
             d->videoSink = QGst::ElementFactory::make(QTGLVIDEOSINK_NAME);
 
             if (!d->videoSink.isNull()) {
                 glw->makeCurrent();
-                d->videoSink->setProperty("glcontext", (void*) QGLContext::currentContext());
+                d->videoSink->setProperty("glcontext", (void*) QOpenGLContext::currentContext());
                 glw->doneCurrent();
 
                 if (d->videoSink->setState(QGst::StateReady) != QGst::StateChangeSuccess) {

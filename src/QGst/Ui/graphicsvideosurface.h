@@ -45,7 +45,7 @@ class GraphicsVideoSurfacePrivate;
  * \code
  * QGraphicsScene *scene = new QGraphicsScene;
  * QGraphicsView *view = new QGraphicsView (scene);
- * view->setViewport(new QGLWidget); //recommended
+ * view->setViewport(new QOpenGLWidget); //recommended
  * QGst::Ui::GraphicsVideoSurface *surface = new QGst::Ui::GraphicsVideoSurface(view);
  * ...
  * QGst::Ui::GraphicsVideoWidget *widget = new QGst::Ui::GraphicsVideoWidget;
