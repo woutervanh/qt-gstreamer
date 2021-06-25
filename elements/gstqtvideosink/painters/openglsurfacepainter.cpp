@@ -16,6 +16,7 @@
 */
 #include "openglsurfacepainter.h"
 #include <QtCore/qmath.h>
+#include <QOpenGLContext>
 
 #ifndef GL_TEXTURE0
 #  define GL_TEXTURE0    0x84C0
@@ -51,8 +52,8 @@ OpenGLSurfacePainter::OpenGLSurfacePainter()
     , m_videoColorMatrix(GST_VIDEO_COLOR_MATRIX_UNKNOWN)
 {
 #ifndef QT_OPENGL_ES
-    glActiveTexture = (_glActiveTexture) QGLContext::currentContext()->getProcAddress(
-            QLatin1String("glActiveTexture"));
+    glActiveTexture = (_glActiveTexture) QOpenGLContext::currentContext()->getProcAddress(
+    		QByteArray("glActiveTexture"));
 #endif
 }
 
@@ -381,18 +382,18 @@ ArbFpSurfacePainter::ArbFpSurfacePainter()
     : OpenGLSurfacePainter()
     , m_programId(0)
 {
-    const QGLContext *context = QGLContext::currentContext();
+    const QOpenGLContext *context = QOpenGLContext::currentContext();
 
     glProgramStringARB = (_glProgramStringARB) context->getProcAddress(
-                QLatin1String("glProgramStringARB"));
+    		QByteArray ("glProgramStringARB"));
     glBindProgramARB = (_glBindProgramARB) context->getProcAddress(
-                QLatin1String("glBindProgramARB"));
+    		QByteArray ("glBindProgramARB"));
     glDeleteProgramsARB = (_glDeleteProgramsARB) context->getProcAddress(
-                QLatin1String("glDeleteProgramsARB"));
+    		QByteArray ("glDeleteProgramsARB"));
     glGenProgramsARB = (_glGenProgramsARB) context->getProcAddress(
-                QLatin1String("glGenProgramsARB"));
+    		QByteArray ("glGenProgramsARB"));
     glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) context->getProcAddress(
-                QLatin1String("glProgramLocalParameter4fARB"));
+    		QByteArray ("glProgramLocalParameter4fARB"));
 }
 
 void ArbFpSurfacePainter::init(const BufferFormat &format)

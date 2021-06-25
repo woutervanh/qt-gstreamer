@@ -21,6 +21,7 @@
 
 #include <QStack>
 #include <QPainter>
+#include <QOpenGLWidget>
 
 QtVideoSinkDelegate::QtVideoSinkDelegate(GstElement *sink, QObject *parent)
     : BaseDelegate(sink, parent)
@@ -43,7 +44,7 @@ void QtVideoSinkDelegate::paint(QPainter *painter, const QRectF & targetArea)
 
 #ifndef GST_QT_VIDEO_SINK_NO_OPENGL
     if (m_glContext) {
-        Q_ASSERT_X(m_glContext == QGLContext::currentContext(),
+        Q_ASSERT_X(m_glContext == QOpenGLContext::currentContext(),
             "qtvideosink - paint",
             "Please use a QPainter that is initialized to paint on the "
             "GL surface that has the same context as the one given on the glcontext property"
@@ -116,23 +117,30 @@ void QtVideoSinkDelegate::paint(QPainter *painter, const QRectF & targetArea)
 
 #ifndef GST_QT_VIDEO_SINK_NO_OPENGL
 
-QGLContext *QtVideoSinkDelegate::glContext() const
+QOpenGLContext *QtVideoSinkDelegate::glContext() const
 {
     return m_glContext;
 }
 
-void QtVideoSinkDelegate::setGLContext(QGLContext *context)
+void QtVideoSinkDelegate::setOpenGLWidget(QOpenGLWidget *widget)
 {
+	QOpenGLContext *context;
+
+	widget->makeCurrent();
+    context = QOpenGLContext::currentContext();
+
     if (m_glContext == context)
         return;
-
     m_glContext = context;
     m_supportedPainters = Generic;
 
     if (m_glContext) {
-        m_glContext->makeCurrent();
+    	printf("1\n");
+        m_glContext->makeCurrent(m_glContext->currentContext()->surface());
+    	printf("2\n");
 
         const QByteArray extensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
+
         GST_LOG_OBJECT(m_sink, "Available GL extensions: %s", extensions.constData());
 
 #ifndef QT_OPENGL_ES
@@ -141,11 +149,13 @@ void QtVideoSinkDelegate::setGLContext(QGLContext *context)
 #endif
 
 #ifndef QT_OPENGL_ES_2
-        if (QGLShaderProgram::hasOpenGLShaderPrograms(m_glContext)
+        if (QOpenGLShaderProgram::hasOpenGLShaderPrograms(m_glContext)
                 && extensions.contains("ARB_shader_objects"))
 #endif
             m_supportedPainters |= Glsl;
     }
+
+	widget->doneCurrent();
 
     GST_LOG_OBJECT(m_sink, "Done setting GL context. m_supportedPainters=%x", (int) m_supportedPainters);
 }

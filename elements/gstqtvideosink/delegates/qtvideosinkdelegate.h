@@ -20,8 +20,11 @@
 
 #include "basedelegate.h"
 #include "../painters/abstractsurfacepainter.h"
+#include <QOpenGLContext>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLWidget>
 
-class QGLContext;
+class QOpenGLContext;
 
 class QtVideoSinkDelegate : public BaseDelegate
 {
@@ -41,8 +44,8 @@ public:
 
 #ifndef GST_QT_VIDEO_SINK_NO_OPENGL
     // glcontext property
-    QGLContext *glContext() const;
-    void setGLContext(QGLContext *context);
+    QOpenGLContext *glContext() const;
+    void setOpenGLWidget(QOpenGLWidget *context);
 #endif
 
     // paint action
@@ -60,7 +63,7 @@ private:
     PainterTypes m_supportedPainters;
 
 #ifndef GST_QT_VIDEO_SINK_NO_OPENGL
-    QGLContext *m_glContext;
+    QOpenGLContext *m_glContext;
 #endif
 };
 

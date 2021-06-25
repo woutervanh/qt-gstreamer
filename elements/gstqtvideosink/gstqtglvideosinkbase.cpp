@@ -238,7 +238,7 @@ gboolean GstQtGLVideoSinkBase::start(GstBaseSink *base)
 
     //fail on purpose if the user hasn't set a context
     if (sink->delegate->supportedPainterTypes() == QtVideoSinkDelegate::Generic) {
-        GST_WARNING_OBJECT(sink, "Neither GLSL nor ARB Fragment Program are supported "
+        GST_WARNING_OBJECT(sink, "WV Neither GLSL nor ARB Fragment Program are supported "
                                  "for painting. Did you forget to set a gl context?");
         return FALSE;
     } else {

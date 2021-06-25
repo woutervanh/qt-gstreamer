@@ -96,16 +96,16 @@ void GstQtGLVideoSink::class_init(gpointer g_class, gpointer class_data)
 
 
     /**
-     * GstQtGLVideoSink::glcontext
+     * GstQtGLVideoSink::qopenglwidget
      *
-     * This property holds a pointer to the QGLContext that will be used to render
-     * the video using OpenGL acceleration. You must set this to a valid QGLContext
+     * This property holds a pointer to the QOpenGLWiget of which the GLContext will be used to render
+     * the video using OpenGL acceleration. You must set this to a valid QOpenGLWidget
      * pointer before the element changes state to READY, or else the state change will fail.
      **/
-    g_object_class_install_property(object_class, PROP_GLCONTEXT,
-        g_param_spec_pointer("glcontext", "GL context",
-                             "The QGLContext that will be used to do OpenGL-accelerated rendering",
-                             static_cast<GParamFlags>(G_PARAM_WRITABLE)));
+    g_object_class_install_property(object_class, PROP_QOPENGLWIDGET,
+  		  g_param_spec_pointer("qopenglwidget", "QOpenGLWidget",
+  				  "The QOpenGLWidget of which the GLContext will be used to do OpenGL-accelerated rendering",
+				  static_cast<GParamFlags>(G_PARAM_WRITABLE)));
 }
 
 void GstQtGLVideoSink::init(GTypeInstance *instance, gpointer g_class)
@@ -124,8 +124,9 @@ void GstQtGLVideoSink::set_property(GObject *object, guint prop_id,
     GstQtVideoSinkBase *sinkBase = GST_QT_VIDEO_SINK_BASE(object);
 
     switch (prop_id) {
-    case PROP_GLCONTEXT:
-        sinkBase->delegate->setGLContext(static_cast<QGLContext*>(g_value_get_pointer(value)));
+    case PROP_QOPENGLWIDGET:
+    	sinkBase->delegate->setOpenGLWidget(static_cast<QOpenGLWidget*>(g_value_get_pointer(value)));
+
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);

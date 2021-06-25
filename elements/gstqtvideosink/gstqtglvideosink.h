@@ -36,7 +36,7 @@ public:
 private:
     enum {
         PROP_0,
-        PROP_GLCONTEXT
+        PROP_QOPENGLWIDGET,
     };
 
     enum {

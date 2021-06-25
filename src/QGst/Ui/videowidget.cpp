@@ -31,15 +31,17 @@
 #include <QtGui/QResizeEvent>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-# include <QtWidgets/QApplication>
-# include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QHBoxLayout>
 #else
-# include <QtGui/QApplication>
-# include <QtGui/QHBoxLayout>
+#include <QtGui/QApplication>
+#include <QtGui/QHBoxLayout>
 #endif
 
 #ifndef QTGSTREAMER_UI_NO_OPENGL
-# include <QtOpenGL/QGLWidget>
+#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLContext>
 #endif
 
 namespace QGst {
@@ -186,7 +188,7 @@ public:
         m_renderer = new QtVideoSinkRenderer(sink, m_glWidget);
 
         m_glWidget->makeCurrent();
-        sink->setProperty("glcontext", (void*) QGLContext::currentContext());
+        sink->setProperty("glcontext", (void*) QOpenGLContext::currentContext());
         m_glWidget->doneCurrent();
     }
 
